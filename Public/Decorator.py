@@ -1,11 +1,11 @@
+import sys
 import time
 
 from functools import wraps
 
 from macaca import WebDriverException
 
-from Public.PageObject.BasePage import BasePage
-
+from Public.BasePage import BasePage
 from Public.ReportPath import ReportPath
 from Public.Log import Log
 
@@ -39,6 +39,21 @@ def teststep(func):
     return wrapper
 
 
+def teststeps(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            log.i('  --> %s', func.__qualname__)
+            ret = func(*args, **kwargs)
+            log.i('  <-- %s, %s', func.__qualname__, 'Success')
+            return ret
+        except WebDriverException:
+            log.e('  <-- %s, %s', func.__qualname__, 'Error')
+            raise WebDriverException
+
+    return wrapper
+
+
 def testcase(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -62,7 +77,7 @@ def setup(func):
     def wrapper(*args, **kwargs):
         log.i('--> %s', func.__qualname__)
         func(*args, **kwargs)
-        log.i('<-- %s\n', func.__qualname__)
+        log.i('<-- %s, %s\n', func.__qualname__, 'Success')
 
     return wrapper
 
@@ -72,7 +87,7 @@ def teardown(func):
     def wrapper(*args, **kwargs):
         log.i('--> %s', func.__qualname__)
         func(*args, **kwargs)
-        log.i('<-- %s\n', func.__qualname__)
+        log.i('<-- %s, %s\n', func.__qualname__, 'Success')
 
     return wrapper
 
@@ -82,7 +97,7 @@ def setupclass(func):
     def wrapper(*args, **kwargs):
         log.i('--> %s', func.__qualname__)
         func(*args, **kwargs)
-        log.i('<-- %s\n', func.__qualname__)
+        log.i('<-- %s, %s\n', func.__qualname__, 'Success')
 
     return wrapper
 
@@ -92,6 +107,6 @@ def teardownclass(func):
     def wrapper(*args, **kwargs):
         log.i('--> %s', func.__qualname__)
         func(*args, **kwargs)
-        log.i('<-- %s\n', func.__qualname__)
+        log.i('<-- %s, %s\n', func.__qualname__, 'Success')
 
     return wrapper

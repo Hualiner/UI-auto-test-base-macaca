@@ -1,6 +1,6 @@
 from macaca import WebDriverException
 
-from Public.PageObject.BasePage import BasePage
+from Public.BasePage import BasePage
 
 from Public.Decorator import teststep
 

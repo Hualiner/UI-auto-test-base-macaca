@@ -1,4 +1,3 @@
-import time
 import unittest
 
 from Public.Decorator import setupclass
@@ -7,16 +6,16 @@ from Public.Decorator import setup
 from Public.Decorator import teardown
 from Public.Decorator import testcase
 
-from Public.PageObject.PlatformAppHomePage import PlatformAppHomePage
-from Public.PageObject.WebViewPage import WebViewPage
-from Public.PageObject.LoginPage import LoginPage
-from Public.PageObject.GesturePasswordPage import GesturePasswordPage
-from Public.PageObject.PlatformAppMyPage import PlatformAppMyPage
+from App.PageObject.PlatformAppHomePage import PlatformAppHomePage
+from App.PageObject.PlatformAppHomePage import back_to_home_page
+from App.PageObject.LoginPage import LoginPage
+from App.PageObject.LoginPage import valid_login
+from App.PageObject.PlatformAppMyPage import PlatformAppMyPage
 
 from CarInsurance.PageObject.CarInsuranceHomePage import CarInsuranceHomePage
 from CarInsurance.PageObject.MyCarInsurancePage import MyCarInsurancePage
 
-from CarInsurance.TestData.Account import VALID_ACCOUNT
+from App.TestData.Account import VALID_ACCOUNT
 
 
 class CarInsuranceEntry(unittest.TestCase):
@@ -34,11 +33,7 @@ class CarInsuranceEntry(unittest.TestCase):
     @setup
     def setUp(self):
         """in order to ensure on the home page for every case"""
-        if not self.home_page.wait_page():
-            web_view = WebViewPage()
-            if web_view.wait_page():
-                web_view.back()
-                self.home_page.wait_page()
+        back_to_home_page()
 
     @teardown
     def tearDown(self):
@@ -47,8 +42,6 @@ class CarInsuranceEntry(unittest.TestCase):
     @testcase
     def test_Car_HomeEntry_Func_010(self):
         """车险首页入口验证"""
-        self.home_page.click_jhj()      # in order to ensure on the jhj page
-        time.sleep(0.5)     # this sleep is necessary, if not, something wrong will happen
         self.home_page.click_car_insurance()
 
         car_insurance_home = CarInsuranceHomePage()
@@ -61,13 +54,7 @@ class CarInsuranceEntry(unittest.TestCase):
 
         login = LoginPage()
         if login.wait_page():
-            login.input_account(VALID_ACCOUNT.account())
-            login.input_password(VALID_ACCOUNT.password())
-            login.login()
-
-            gesture = GesturePasswordPage()
-            if gesture.wait_page():
-                gesture.skip()
+            valid_login(VALID_ACCOUNT.account(), VALID_ACCOUNT.password())
 
             if self.home_page.wait_page():
                 self.home_page.click_my()
@@ -78,18 +65,3 @@ class CarInsuranceEntry(unittest.TestCase):
 
         my_car_insurance = MyCarInsurancePage()
         self.assertTrue(my_car_insurance.wait_page())
-
-    # def test_case1(self):
-    #     x = 1
-    #     print('x:', x)
-    #     self.assertEqual(x, 1)
-    #
-    # def test_case2(self):
-    #     x = 2
-    #     print('x:', x)
-    #     self.assertEqual(x, 1)
-    #
-    # def test_case3(self):
-    #     x = 2/0
-    #     print('x:', x)
-    #     self.assertEqual(x, 1)

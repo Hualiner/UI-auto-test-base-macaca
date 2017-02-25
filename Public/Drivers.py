@@ -9,11 +9,10 @@ from Public.Devices import Devices
 from Public.MacacaServer import MacacaServer
 from Public.RunCases import RunCases
 from Public.ReportPath import ReportPath
-
-from Public.PageObject.BasePage import BasePage
-from Public.PageObject.WizardPage import skip_wizard_to_home
-
+from Public.BasePage import BasePage
 from Public.Log import Log
+
+from App.PageObject.WizardPage import skip_wizard_to_home
 
 
 class Drivers:
