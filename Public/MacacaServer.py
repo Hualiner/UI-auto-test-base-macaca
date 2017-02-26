@@ -1,4 +1,5 @@
 import os
+import time
 import requests
 
 from multiprocessing import Pool
@@ -29,6 +30,12 @@ class MacacaServer:
 
         # after start macaca server, macaca server process can not return, so should not join
         # p.join()
+
+        for run in self._runs:
+            while not self.is_running(run.get_port()):
+                print('wait macaca server all ready...')
+                time.sleep(1)
+        print('macaca server all ready')
 
     def _run_server(self, run):
         port = run.get_port()

@@ -65,11 +65,6 @@ class Drivers:
         # start macaca server
         macaca_server = MacacaServer(runs)
         macaca_server.start_server()
-        for port in ports:
-            while not macaca_server.is_running(port):
-                print('wait macaca server all ready...')
-                time.sleep(1)
-        print('macaca server all ready')
 
         # run on every device
         pool = Pool(processes=len(runs))
