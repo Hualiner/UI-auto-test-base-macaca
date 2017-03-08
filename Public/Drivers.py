@@ -11,6 +11,7 @@ from Public.RunCases import RunCases
 from Public.ReportPath import ReportPath
 from Public.BasePage import BasePage
 from Public.Log import Log
+from Public.LoginStatus import LoginStatus
 
 from App.PageObject.WizardPage import skip_wizard_to_home
 
@@ -35,14 +36,22 @@ class Drivers:
         path = ReportPath()
         path.set_path(run.get_path())
 
+        login_status = LoginStatus()
+        login_status.set_status(False)
+
         # set cls.driver, it must be call before operate on any page
         base_page = BasePage()
         base_page.set_driver(driver)
 
-        # skip wizard
-        if skip_wizard_to_home():
+        try:
+            # skip wizard
+            # if not into home page will raise AssertionError
+            skip_wizard_to_home()
+
             # run cases
             run.run(cases)
+        except AssertionError as e:
+            log.e('AssertionError, %s', e)
 
         # quit driver
         driver.quit()
@@ -77,3 +86,5 @@ class Drivers:
 
         pool.close()
         pool.join()
+
+        macaca_server.kill_macaca_server()

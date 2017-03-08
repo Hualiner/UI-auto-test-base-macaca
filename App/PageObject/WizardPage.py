@@ -39,7 +39,4 @@ def skip_wizard_to_home():
         popup.close()
 
     home_page = PlatformAppHomePage()
-    if home_page.wait_page():
-        return True
-    else:
-        return False
+    assert home_page.wait_page()

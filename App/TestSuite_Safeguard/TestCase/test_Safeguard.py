@@ -7,16 +7,14 @@ from Public.Decorator import teardown
 from Public.Decorator import testcase
 
 from App.PageObject.PlatformAppHomePage import PlatformAppHomePage
-from App.PageObject.PlatformAppHomePage import back_to_home_page
+from App.PageObject.PlatformAppHomePage import back_to_app
+from App.PageObject.SafeguardPage import SafeguardPage
 
-from Finance.PageObject.FinanceHomePage import FinanceHomePage
 
-
-class FinanceEntry(unittest.TestCase):
+class Safeguard(unittest.TestCase):
     @classmethod
     @setupclass
     def setUpClass(cls):
-        """public variable in every case"""
         cls.home_page = PlatformAppHomePage()
 
     @classmethod
@@ -26,18 +24,16 @@ class FinanceEntry(unittest.TestCase):
 
     @setup
     def setUp(self):
-        """in order to ensure on the home page for every case"""
-        back_to_home_page()
+        back_to_app()
 
     @teardown
     def tearDown(self):
         pass
 
     @testcase
-    def test_Finance_HomeEntry_Func_020(self):
-        """理财首页入口验证"""
-        self.home_page.click_finance_choiceness_more()
+    def test_App_Safeguard_Func_010(self):
+        """保障"""
+        self.home_page.click_safeguard()
 
-        finance_home = FinanceHomePage()
-        self.assertTrue(finance_home.wait_page())
-
+        safeguard = SafeguardPage()
+        self.assertTrue(safeguard.wait_page())

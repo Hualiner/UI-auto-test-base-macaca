@@ -10,6 +10,9 @@ class MacacaServer:
         self._runs = runs
         self._cmd = 'macaca server -p %s --verbose'
         self._url = 'http://127.0.0.1:%s/wd/hub/status'
+        self._file = 'macaca_server_port_%s.log'
+        self._kill = 'taskkill /PID %d /F'
+        self._pids = []
 
     @staticmethod
     def server_url(port):
@@ -37,9 +40,19 @@ class MacacaServer:
                 time.sleep(1)
         print('macaca server all ready')
 
+        for run in self._runs:
+            file = str(run.get_path() + '\\' + self._file) % run.get_port()
+            with open(file, 'r') as f:
+                line = f.readline()
+                start = line.find('pid:')
+                end = line[start:].find(' ')
+
+                pid = line[start:][4:end]
+                self._pids.append(int(pid))
+
     def _run_server(self, run):
         port = run.get_port()
-        cmd = str(self._cmd + ' > ' + run.get_path() + '\\' + 'macaca_server_port_%s.log') % (port, port)
+        cmd = str(self._cmd + ' > ' + run.get_path() + '\\' + self._file) % (port, port)
         os.system(cmd)
 
     def is_running(self, port):
@@ -63,4 +76,6 @@ class MacacaServer:
             if response:
                 response.close()
 
-
+    def kill_macaca_server(self):
+        for pid in self._pids:
+            os.popen(self._kill % pid)
