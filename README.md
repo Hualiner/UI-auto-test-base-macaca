@@ -12,6 +12,8 @@
 
 7. Test report form HTML
 
+8. Interactive debug
+
 https://testerhome.com/topics/7550
 
 https://testerhome.com/topics/7658
